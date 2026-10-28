@@ -1,0 +1,47 @@
+{
+  "name": "hongkong-company-mcp",
+  "version": "1.2.4",
+  "description": "Hong Kong Company MCP Server (com.86hc/hongkong-company) - Search 3.9M+ HK companies (CR No, BRN, UBO, status) & order official ICRIS filings (NAR1, NNC1, CI) via Stripe. Zero-config free trial by 86hc.com.",
+  "mcpName": "com.86hc/hongkong-company",
+  "main": "index.js",
+  "bin": {
+    "hongkong-company-mcp": "index.js"
+  },
+  "files": [
+    "index.js",
+    "server.py",
+    "server.json",
+    "README.md"
+  ],
+  "scripts": {
+    "start": "node index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/86hc-compliance/hongkong-company-mcp.git"
+  },
+  "bugs": {
+    "url": "https://github.com/86hc-compliance/hongkong-company-mcp/issues"
+  },
+  "keywords": [
+    "mcp",
+    "model-context-protocol",
+    "mcp-server",
+    "hong-kong",
+    "hongkong",
+    "company-registry",
+    "icris",
+    "kyb",
+    "due-diligence",
+    "86hc",
+    "nar1",
+    "nnc1",
+    "brn"
+  ],
+  "author": "HC Business (恒诚商务) <support@86hc.com> (https://www.86hc.com)",
+  "license": "MIT",
+  "homepage": "https://www.86hc.com",
+  "engines": {
+    "node": ">=16.0.0"
+  }
+}
