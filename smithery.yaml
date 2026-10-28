@@ -1,0 +1,14 @@
+startCommand:
+  type: stdio
+  configSchema:
+    type: object
+    properties:
+      apiKey:
+        type: string
+        description: Optional 86hc.com API Key (hkq_live_...). Leave blank for 3 free company lookups/day per IP, or get a free key at https://www.86hc.com/user for 20 free lookups/day.
+  commandFunction: |-
+    (config) => ({
+      command: 'node',
+      args: ['index.js'],
+      env: config && config.apiKey ? { HK_COMPANY_API_KEY: config.apiKey } : {}
+    })
