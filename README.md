@@ -2,7 +2,7 @@
 
 <!-- mcp-name: com.86hc/hongkong-company -->
 
-[![Official MCP Registry](https://img.shields.io/badge/MCP%20Registry-com.86hc%2Fhongkong--company-1d6ff2.svg?style=flat-square)](https://registry.modelcontextprotocol.io/v0.1/servers/com.86hc/hongkong-company)
+[![Official MCP Registry](https://img.shields.io/badge/MCP%20Registry-com.86hc%2Fhongkong--company-1d6ff2.svg?style=flat-square)](https://registry.modelcontextprotocol.io/v0.1/servers/com.86hc%2Fhongkong-company/versions/latest)
 [![NPM Version](https://img.shields.io/npm/v/hongkong-company-mcp?style=flat-square&color=cb3837)](https://www.npmjs.com/package/hongkong-company-mcp)
 [![PyPI Version](https://img.shields.io/pypi/v/hongkong-company-mcp?style=flat-square&color=3775a9)](https://pypi.org/project/hongkong-company-mcp/)
 [![GitHub Repository](https://img.shields.io/badge/GitHub-86hc--compliance%2Fhongkong--company--mcp-24292f.svg?style=flat-square)](https://github.com/86hc-compliance/hongkong-company-mcp)
@@ -87,7 +87,7 @@ hongkong-company-mcp
 ## Official MCP Registry & Package Channels
 - **Registry Name**: `com.86hc/hongkong-company`
 - **Catalog Status**: `active` (Official Registry Verified)
-- **Registry API**: [https://registry.modelcontextprotocol.io/v0.1/servers/com.86hc/hongkong-company](https://registry.modelcontextprotocol.io/v0.1/servers/com.86hc/hongkong-company)
+- **Registry API**: [https://registry.modelcontextprotocol.io/v0.1/servers/com.86hc%2Fhongkong-company/versions/latest](https://registry.modelcontextprotocol.io/v0.1/servers/com.86hc%2Fhongkong-company/versions/latest)
 - **GitHub Repository**: [https://github.com/86hc-compliance/hongkong-company-mcp](https://github.com/86hc-compliance/hongkong-company-mcp)
 - **NPM Package**: [https://www.npmjs.com/package/hongkong-company-mcp](https://www.npmjs.com/package/hongkong-company-mcp)
 - **PyPI Package**: [https://pypi.org/project/hongkong-company-mcp/](https://pypi.org/project/hongkong-company-mcp/)
