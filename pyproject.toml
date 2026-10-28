@@ -59,7 +59,7 @@ Homepage = "https://www.86hc.com"
 Documentation = "https://www.86hc.com/user"
 Repository = "https://github.com/86hc-compliance/hongkong-company-mcp"
 Issues = "https://github.com/86hc-compliance/hongkong-company-mcp/issues"
-Registry = "https://registry.modelcontextprotocol.io/v0.1/servers/com.86hc/hongkong-company"
+Registry = "https://registry.modelcontextprotocol.io/v0.1/servers/com.86hc%2Fhongkong-company/versions/latest"
 
 [tool.hatch.build.targets.wheel]
 packages = ["server.py"]
