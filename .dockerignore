@@ -1,0 +1,17 @@
+# Docker build ignore patterns for hongkong-company-mcp
+node_modules
+dist
+.git
+.github
+__pycache__
+*.pyc
+*.pyo
+*.egg-info
+.pytest_cache
+.venv
+venv
+env
+.env
+.env.local
+mcp_key.txt
+*.log

@@ -12,3 +12,6 @@ startCommand:
       args: ['index.js'],
       env: config && config.apiKey ? { HK_COMPANY_API_KEY: config.apiKey } : {}
     })
+  exampleConfig:
+    apiKey: ""
+

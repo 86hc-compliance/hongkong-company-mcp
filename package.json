@@ -1,7 +1,7 @@
 {
   "name": "hongkong-company-mcp",
-  "version": "1.2.4",
-  "description": "Hong Kong Company MCP Server (com.86hc/hongkong-company) - Search 3.9M+ HK companies (CR No, BRN, UBO, status) & order official ICRIS filings (NAR1, NNC1, CI) via Stripe. Zero-config free trial by 86hc.com.",
+  "version": "1.3.2",
+  "description": "Hong Kong Company MCP Server (com.86hc/hongkong-company) - Search 3.9M+ HK companies (CR No, 8-digit BRN/UBI, UBO, status), order official ICRIS/IRD filings (NAR1, NNC1, CI, BRC, EBRE) & pre-screen HSBC/OCBC corporate bank accounts. Zero-config free trial by 86hc.com.",
   "mcpName": "com.86hc/hongkong-company",
   "main": "index.js",
   "bin": {

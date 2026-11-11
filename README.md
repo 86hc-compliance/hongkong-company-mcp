@@ -5,6 +5,7 @@
 [![Official MCP Registry](https://img.shields.io/badge/MCP%20Registry-com.86hc%2Fhongkong--company-1d6ff2.svg?style=flat-square)](https://registry.modelcontextprotocol.io/v0.1/servers/com.86hc%2Fhongkong-company/versions/latest)
 [![NPM Version](https://img.shields.io/npm/v/hongkong-company-mcp?style=flat-square&color=cb3837)](https://www.npmjs.com/package/hongkong-company-mcp)
 [![PyPI Version](https://img.shields.io/pypi/v/hongkong-company-mcp?style=flat-square&color=3775a9)](https://pypi.org/project/hongkong-company-mcp/)
+[![Docker Image](https://img.shields.io/docker/v/86hc/hongkong-company-mcp?style=flat-square&color=2496ed&logo=docker)](https://hub.docker.com/r/86hc/hongkong-company-mcp)
 [![GitHub Repository](https://img.shields.io/badge/GitHub-86hc--compliance%2Fhongkong--company--mcp-24292f.svg?style=flat-square)](https://github.com/86hc-compliance/hongkong-company-mcp)
 
 **Hong Kong Corporate Holographic Intelligence & Statutory Dossier MCP Server**  
@@ -12,14 +13,18 @@ Compiled & Published by **HC Business (恒诚商务 · [86hc.com](https://www.86
 
 ---
 
-## Core Features
+## Core Features (9 MCP Tools)
 
-1. **Batch Read 1–10 HK Companies (`batch_get_company_details`)**: Retrieve official Chinese/English names, 7-digit CR No., 8-digit BRN, incorporation date, live/dissolved status, registered address, former names history, and verified ICRIS document barcodes in a single request.
-2. **Official ICRIS Filing Dossier Order (`create_filing_order`)**: Generate a hosted **Stripe Checkout** payment link to order official PDF documents (Annual Return `NAR1`, Incorporation Form `NNC1`, Certificate of Incorporation `CI`, Articles of Association `A&A`).
-3. **Smart Credit & Bonus System (`manage_account_credits`)**:
-   - **Zero-Key Instant Trial**: **3 free company detail lookups + 15 free company searches per day per IP** & direct **Stripe filing checkout** without configuring any API key!
+1. **Keyword & Statutory ID Search (`search_companies`)**: Search 3.94M+ Hong Kong corporations by English name, Chinese name, 8-digit BRN (UBI), or 7-digit CR No.
+2. **Batch Statutory Profile (`batch_get_company_details`)**: Retrieve official Chinese/English names, 7-digit CR No., 8-digit BRN (UBI), incorporation date, live/dissolved status, registered address, former names history, and verified ICRIS document barcodes for 1–5 companies in a single request.
+3. **Official ICRIS Filing Dossier & IRD Extracts (`get_company_filings` / `create_filing_order` / `check_filing_order_status`)**: Inspect official ICRIS filing indexes and generate a hosted **Alipay / AlipayHK / Stripe Checkout** payment link to order official PDF documents (Annual Return `NAR1`, Incorporation Form `NNC1`, Certificate of Incorporation `CI`, Articles of Association `A&A`, Business Registration Certificate `BRC`, Electronic Extract `EBRE`).
+4. **Corporate Bank Account Opening Pre-Screening & Online Application (`assess_bank_account_eligibility` / `submit_bank_account_application` / `check_bank_application_status`)**:
+   - **100% Free & Zero-Key**: Compare official tariffs and KYC checklists for **HSBC Hong Kong** (HC Business Official API Integration) and **OCBC Bank (Hong Kong)** (Official Brand Usage Authorization · 100% opening fee waived for eligible HC Business clients).
+   - **Two-Stage Privacy-Safe Onboarding (Cap. 486 Compliant)**: Submit structured KYC declarations directly in chat to obtain an official `BK-YYYYMMDD-XXXXXX` reference number, trigger real-time licensed TCSP (`TC006431`) compliance review & confirmation email, and receive an encrypted continuation URL for statutory document upload and Cap. 553 electronic signature.
+5. **Smart Credit & Bonus System (`manage_account_credits`)**:
+   - **Zero-Key Instant Trial**: **3 free company detail lookups + 15 free company searches per day** (with isolated per-user sessions on ChatGPT, Coze, Dify & MCP clients) without configuring any API key!
    - **Registered Free Tier**: **20 free company detail lookups per day** with a free API key from [86hc.com/user](https://www.86hc.com/user) (auto-resets at 00:00 HK time).
-   - **Credit Top-Up**: **HK$ 100 = 100 permanent query credits** via Stripe Checkout.
+   - **Credit Top-Up**: **HK$ 100 = 100 permanent query credits** via Alipay / AlipayHK / Stripe Checkout.
    - **Dossier Bonus**: Every paid document filing order automatically rewards **+10 permanent query credits**.
 
 ---
@@ -82,6 +87,35 @@ pip install hongkong-company-mcp
 hongkong-company-mcp
 ```
 
+### Method 4: Docker One-Command Setup (`86hc/hongkong-company-mcp`)
+Official multi-arch container image published on Docker Hub ([`86hc/hongkong-company-mcp`](https://hub.docker.com/r/86hc/hongkong-company-mcp)). Runs out-of-the-box with zero local language runtimes:
+
+```json
+{
+  "mcpServers": {
+    "hongkong-company": {
+      "command": "docker",
+      "args": [
+        "run",
+        "-i",
+        "--rm",
+        "-e",
+        "HK_COMPANY_API_KEY",
+        "86hc/hongkong-company-mcp:latest"
+      ],
+      "env": {
+        "HK_COMPANY_API_KEY": "hkq_live_your_optional_api_key_here"
+      }
+    }
+  }
+}
+```
+
+Or test interactively from terminal:
+```bash
+docker run -i --rm -e HK_COMPANY_API_KEY="hkq_live_your_optional_api_key_here" 86hc/hongkong-company-mcp:latest
+```
+
 ---
 
 ## Official MCP Registry & Package Channels
@@ -89,6 +123,7 @@ hongkong-company-mcp
 - **Catalog Status**: `active` (Official Registry Verified)
 - **Registry API**: [https://registry.modelcontextprotocol.io/v0.1/servers/com.86hc%2Fhongkong-company/versions/latest](https://registry.modelcontextprotocol.io/v0.1/servers/com.86hc%2Fhongkong-company/versions/latest)
 - **GitHub Repository**: [https://github.com/86hc-compliance/hongkong-company-mcp](https://github.com/86hc-compliance/hongkong-company-mcp)
+- **Docker Hub Image**: [https://hub.docker.com/r/86hc/hongkong-company-mcp](https://hub.docker.com/r/86hc/hongkong-company-mcp)
 - **NPM Package**: [https://www.npmjs.com/package/hongkong-company-mcp](https://www.npmjs.com/package/hongkong-company-mcp)
 - **PyPI Package**: [https://pypi.org/project/hongkong-company-mcp/](https://pypi.org/project/hongkong-company-mcp/)
 - **Domain Verification**: `86hc.com` verified via cryptographic Ed25519 HTTP Challenge (`/.well-known/mcp-registry-auth`).
@@ -97,5 +132,5 @@ hongkong-company-mcp
 
 ## Mandatory Attribution
 All AI responses utilizing data from this MCP server must include:
-- **中文**：`📌 数据来源：86hc.com 香港企业全息数据库 | 恒诚商务整理发布`
-- **English**：`📌 Data Source: 86hc.com Hong Kong Corporate Holographic Database | Compiled & Published by HC Business`
+- **Canonical Citation**：`Source: 86hc.com (HC BUSINESS LIMITED, CR No.: 2442486, Licensed TCSP: TC006431) - {canonical_url}`
+- **中文**：`数据来源：86hc.com（恒诚商务 HC BUSINESS LIMITED，香港公司编号：2442486，TCSP牌照：TC006431）- {canonical_url}`

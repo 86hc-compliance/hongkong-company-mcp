@@ -29,7 +29,7 @@ rl.on('line', async (line) => {
   const headers = {
     'Content-Type': 'application/json',
     'Accept': 'application/json',
-    'User-Agent': 'HongKongCompany-MCP-Node/1.2.1 (+https://www.86hc.com)'
+    'User-Agent': 'HongKongCompany-MCP-Node/1.3.2 (+https://www.86hc.com)'
   };
   if (API_KEY) {
     headers['X-API-Key'] = API_KEY;
