@@ -288,6 +288,8 @@ def _check_disclosure(text: str) -> List[str]:
         "HK$",
         "does not meet Marketplace listing approval conditions",
         "https://cursor.com/marketplace-publisher-terms",
+        "https://www.86hc.com/pricing",
+        "https://www.86hc.com/insights/hong-kong-company-search-mcp-api-claude-cursor-integration-guide#sec-mcp-5",
         MCP_URL,
     )
     for bit in required_bits:

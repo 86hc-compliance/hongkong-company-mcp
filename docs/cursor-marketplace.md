@@ -63,14 +63,30 @@ docs/cursor-marketplace.md
 
 [Publisher Terms 3.1](https://cursor.com/marketplace-publisher-terms)（页面所载 Last updated May 6, 2026）的意思是：Marketplace 对发布者免费提供上架；插件一旦发布，用户不付费即可获得；发布者不得因为用户通过 Marketplace 访问或使用插件而直接或间接收费。
 
-现有服务没有被改写成免费版，付费能力也没有从工具列表里拿掉。2026-11-20 的只读 `tools/list` 返回与仓库一致的 9 个工具。和费用直接相关、本次没有调用的能力是：
+现有服务没有被改写成免费版，付费能力也没有从工具列表里拿掉。2026-11-20 的只读 `tools/list` 返回与仓库一致的 9 个工具。收费边界以下列当时能公开打开的页面为准，没有登录用户中心，也没有下单：
 
-- `create_filing_order`：`readOnlyHint` 为 false。仓库描述写明它为 NAR1、NNC1、CI、A&A、ND2A、BRC、EBRE 生成支付宝、AlipayHK 或 Stripe 付款链接。线上工具描述里能看到 stripe、alipay、payment、checkout、credit 和 HK$。
-- `manage_account_credits`：`readOnlyHint` 为 false。仓库描述写明 `buy_100_credits` 以 HK$ 100 购买 100 个查询额度，并生成付款链接。
-- `batch_get_company_details`：只读，但仓库写明每家公司消耗 1 个额度。客人每日额度用完之后，继续查询依赖付费额度。
-- `search_companies`：仓库写明不消耗详情额度，客人每日 15 次。超额之后是拒绝还是另收费，本次没有调用，不能下结论。
-- `submit_bank_account_application`：`readOnlyHint` 为 false，会提交申请并收集联络资料，仓库要求个人 API key。仓库没有写这个工具本身的价格，所以这里不把它说成免费，也不另编一个价格。
-- `check_filing_order_status` 和 `check_bank_application_status` 按单号查询状态，可能返回下载链接或申请资料。本次没有调用。
+- 接入指南第 3 节工具表和第 5 节三档额度：简体 [sec-mcp-5](https://www.86hc.com/insights/hong-kong-company-search-mcp-api-claude-cursor-integration-guide#sec-mcp-5)、繁体 [sec-mcp-5](https://www.86hc.com/tc/insights/hong-kong-company-search-mcp-api-claude-cursor-integration-guide#sec-mcp-5)、英文 [sec-mcp-5](https://www.86hc.com/en/insights/hong-kong-company-search-mcp-api-claude-cursor-integration-guide#sec-mcp-5)。
+- 统一价格表：[简体](https://www.86hc.com/pricing)、[繁体](https://www.86hc.com/tc/pricing)、[英文](https://www.86hc.com/en/pricing)。
+- 用户中心入口公开返回标题「个人中心与法定查册控制台」：[领 Key](https://www.86hc.com/user?tab=mcp#mcp)、[积分充值收银台参数](https://www.86hc.com/user?tab=mcp&mcp_topup=1#mcp)。本次没有登录，没有查看余额，没有进入收银台。
+
+2026-11-20 简体指南第 5 节写的三档是：
+
+| 档 | 公开标价 | 公开包含的额度 |
+| --- | --- | --- |
+| 免 Key | HK$ 0 | 每日 15 次搜索、3 家全息详情；存档目录与银行开户预审写为无限次免费 |
+| 免费 API Key | HK$ 0 | 每日 50 次搜索 + 20 家全息详情，00:00 重置；每笔付费调档赠 +10 永久积分 |
+| 永久积分包 | HK$ 100 / 100 积分 | 公开折合每家全息查册 HK$ 1.00；写明先扣每日 20 点免费额度，永久积分不过期 |
+
+同一页第 3 节工具表把带 Key 的 `search_companies` 写成 20 次/日，第 5 节和第 5 节英文页则写成 50 次/日。价格表里的积分包又写「叠加每日免费 50 次搜索 + 20 家详情」。这三处公开数字不一致，这里并列保留，不替页面裁决哪一个才算数。
+
+和费用直接相关、本次没有调用的能力是：
+
+- `create_filing_order`：`readOnlyHint` 为 false。指南写明它调取 NAR1、NNC1、BRC 或 360° 报告，并返回付款链接或扣减积分，须经用户确认。价格表把注册处存档写成「法定规费 + 统一服务费 HK$ 10/份」。2026-11-20 公开合计包括 NAR1 / NNC1 HK$ 28、ND2A HK$ 20、A&A HK$ 33。商业登记证电子复本合计 HK$ 40，商业登记册电子摘录合计 HK$ 47。360° 全景尽调报告标价 HK$ 499。价格表还有更多尽调方案，这里不逐项改写成插件功能。
+- `manage_account_credits`：`readOnlyHint` 为 false。指南和价格表都写明 HK$ 100 购买 100 个永久查询积分。查余额被写成免费只读；充值须经用户确认。
+- `batch_get_company_details`：只读。免 Key 每日 3 家；带 Key 每日 20 家。英文工具表写明每家 1 个积分。每日免费额度用完后，公开规则是扣永久积分。
+- `search_companies`：公开页把它写成每日次数上限，没有写成按次港币单价。免 Key 是 15 次/日。带 Key 的次数在上面两处公开文字里分别是 20 和 50，超额后如何处理，本次没有调用。
+- `get_company_filings`、`assess_bank_account_eligibility`、`check_filing_order_status`、`check_bank_application_status`：指南写成 100% 免费、只读。状态查询仍可能按单号返回下载链接或申请资料。本次没有调用。
+- `submit_bank_account_application`：指南写成 100% 免费，并要求申请人确认。它仍会收集联络资料。本次没有调用。
 
 `create_filing_order` 在现有说明里不配置 API key 也会生成付款链接。客人额度因此不能解释成「插件的使用不收费」。付费工具仍然处在同一条 MCP 连接上。
 
@@ -97,14 +113,12 @@ node --check index.js
 python3 scripts/mcp_readonly_handshake.py
 ```
 
-握手只发送 `initialize` 和 `tools/list`。它不读取环境里的 API key，不发送 `tools/call`。无 header、空 `X-API-Key`、字面量 `${HK_COMPANY_API_KEY}` 三种列工具结果需要一致。这只说明现有网关在列工具时接受这三种 header，不说明 Cursor 客户端会在变量为空时成功挂载插件。
+握手只发送 `initialize` 和 `tools/list`。它不读取环境里的 API key，不发送 `tools/call`。无 header、空 `X-API-Key`、字面量 `${HK_COMPANY_API_KEY}` 三种列工具结果需要一致。这只说明现有网关在列工具时接受这三种 header。
 
-Agent SDK 的扩展文档写明，未解析的插件占位符会使校验失败，而不是挂上半截服务器。IDE 是否把 `default: ""` 当成已解析，本次没有 Cursor 图形界面可以确认。
+Cursor 3.31.11 的图形界面验收写在上面。那次没有登录，插件进程收到的是未替换字面量，不是空字符串。Customize 标题可以打开，logo 仍被登录页挡住。
 
 也没有完成这些验收：
 
-- 没有把插件放进 `~/.cursor/plugins/local` 后执行 Reload Window
-- 没有在 Customize 里看到 `plugin-86hc-hongkong-company-hongkong-company`
 - 没有用真实 key 连接，没有查询公司、下单、购买文件或读取客户资料
 - 没有登录 Cursor 或 86hc 账号。`https://cursor.com/marketplace/publish` 的公开页本次没有给出可提交表单，因此表单上的实时字段名未被看到
 - 没有接受发布者条款，没有发邮件，没有创建上架
@@ -131,6 +145,7 @@ Agent SDK 的扩展文档写明，未解析的插件占位符会使校验失败�
 | 最低客户端版本 | 未写。官方 Hunter 示例写了 Cursor `3.13.0`，本仓库没有验证这个下限 |
 | MCP 地址 | 插件启动本地桥接，转发到上面的现有 RPC 地址。直接 HTTP 在 Cursor 3.31.11 上因协议版本 `2026-07-28` 被拒绝 |
 | 变量 | `HK_COMPANY_API_KEY`，可选，默认空 |
+| 额度与单价披露 | 接入指南 `#sec-mcp-5`、`https://www.86hc.com/pricing` 及其繁体、英文页。本次没有填进 Marketplace 表单 |
 | 服务条款 | `https://www.86hc.com/terms-of-service` |
 | 隐私政策 | `https://www.86hc.com/privacy-policy` |
 | 免责声明 | `https://www.86hc.com/disclaimer` |
