@@ -134,7 +134,7 @@ def validate_tree(root: Path) -> List[str]:
 
     errors.extend(_check_manifest_policy(manifest))
     errors.extend(_check_logo(root, manifest))
-    errors.extend(_check_mcp(mcp, manifest))
+    errors.extend(_check_mcp(root, mcp, manifest))
     errors.extend(_check_secrets(manifest_path, mcp_path))
     errors.extend(_check_disclosure(doc_path.read_text(encoding="utf-8")))
     return errors
@@ -220,7 +220,7 @@ def _check_logo(root: Path, manifest: Any) -> List[str]:
     return []
 
 
-def _check_mcp(mcp: Any, manifest: Any) -> List[str]:
+def _check_mcp(root: Path, mcp: Any, manifest: Any) -> List[str]:
     errors: List[str] = []
     if not isinstance(mcp, dict):
         return ["mcp.json must be an object"]
@@ -231,26 +231,33 @@ def _check_mcp(mcp: Any, manifest: Any) -> List[str]:
     server = servers["hongkong-company"]
     if not isinstance(server, dict):
         return ["hongkong-company server entry must be an object"]
-    allowed = {"type", "url", "headers"}
+    allowed = {"command", "args", "env"}
     extra = sorted(set(server) - allowed)
     if extra:
         errors.append(f"hongkong-company has unsupported fields: {', '.join(extra)}")
-    if server.get("type") != "http":
-        errors.append('hongkong-company type must be "http"')
-    if server.get("url") != MCP_URL:
-        errors.append(f"hongkong-company url must stay {MCP_URL}")
-    headers = server.get("headers")
-    if headers != {"X-API-Key": PLACEHOLDER}:
-        errors.append(f'X-API-Key must be exactly "{PLACEHOLDER}" and no other header may be set')
+    if server.get("command") != "node":
+        errors.append('hongkong-company command must be "node"')
+    if server.get("args") != ["${CURSOR_PLUGIN_ROOT}/scripts/cursor_mcp_stdio_bridge.js"]:
+        errors.append("hongkong-company must launch the plugin-local protocol bridge")
+    if server.get("env") != {"HK_COMPANY_API_KEY": PLACEHOLDER}:
+        errors.append(f'HK_COMPANY_API_KEY must be exactly "{PLACEHOLDER}"')
+    bridge = root / "scripts" / "cursor_mcp_stdio_bridge.js"
+    if not bridge.is_file():
+        errors.append("scripts/cursor_mcp_stdio_bridge.js is missing")
+    elif "https://www.86hc.com/wp-json/hkquery/v1/mcp/rpc" not in bridge.read_text(encoding="utf-8"):
+        errors.append("protocol bridge must keep forwarding to the existing 86hc endpoint")
     raw = json.dumps(mcp, ensure_ascii=False)
     if ENV_PLACEHOLDER_RE.search(raw):
         errors.append("plugin mcp.json must use ${HK_COMPANY_API_KEY}, not ${env:...}")
     names = PLACEHOLDER_RE.findall(raw)
+    builtin_placeholders = {"CURSOR_PLUGIN_ROOT", "CLAUDE_PLUGIN_ROOT"}
     declared = set()
     variables = manifest.get("variables") if isinstance(manifest, dict) else None
     if isinstance(variables, dict) and isinstance(variables.get("properties"), dict):
         declared = set(variables["properties"])
     for name in names:
+        if name in builtin_placeholders:
+            continue
         if name not in declared:
             errors.append(f"mcp.json placeholder ${{{name}}} is not declared in plugin variables")
     if isinstance(variables, dict) and isinstance(variables.get("properties"), dict):

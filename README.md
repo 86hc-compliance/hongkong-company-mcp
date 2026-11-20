@@ -132,7 +132,7 @@ docker run -i --rm -e HK_COMPANY_API_KEY="hkq_live_your_optional_api_key_here" 8
 
 ## Cursor plugin manifest
 
-`.cursor-plugin/plugin.json` and `mcp.json` point Cursor at the existing remote MCP endpoint. They do not change the server, its tools, or its release workflow. `HK_COMPANY_API_KEY` is a plugin variable placeholder, not a committed secret. The logo is the committed file `assets/logo.png`. Filing orders and credit top-ups still return payment links. This repository is not a Cursor Marketplace listing; read [docs/cursor-marketplace.md](docs/cursor-marketplace.md) before any submission.
+`.cursor-plugin/plugin.json` and `mcp.json` load this repository as a Cursor plugin. A small stdio bridge forwards to the existing remote MCP endpoint and rewrites only the initialize protocol version that Cursor 3.31 negotiates. They do not change the server, its tools, or its release workflow. `HK_COMPANY_API_KEY` is a plugin variable placeholder, not a committed secret. The logo is the committed file `assets/logo.png`. Filing orders and credit top-ups still return payment links. This repository is not a Cursor Marketplace listing; read [docs/cursor-marketplace.md](docs/cursor-marketplace.md) before any submission.
 
 ## Mandatory Attribution
 All AI responses utilizing data from this MCP server must include:

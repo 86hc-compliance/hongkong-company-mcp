@@ -9,6 +9,7 @@ from __future__ import annotations
 import hashlib
 import json
 import shutil
+import subprocess
 import sys
 import tempfile
 import unittest
@@ -36,7 +37,7 @@ class CursorPluginManifestTest(unittest.TestCase):
         root = self._stage()
         mcp_path = root / "mcp.json"
         mcp = json.loads(mcp_path.read_text(encoding="utf-8"))
-        mcp["mcpServers"]["hongkong-company"]["headers"]["X-API-Key"] = "hkq_" + "live_" + "abcdefghijklmnop"
+        mcp["mcpServers"]["hongkong-company"]["env"]["HK_COMPANY_API_KEY"] = "hkq_" + "live_" + "abcdefghijklmnop"
         mcp_path.write_text(json.dumps(mcp), encoding="utf-8")
         errors = validator.validate_tree(root)
         self.assertTrue(errors)
@@ -56,6 +57,24 @@ class CursorPluginManifestTest(unittest.TestCase):
         manifest_path.write_text(json.dumps(manifest), encoding="utf-8")
         errors = validator.validate_tree(root)
         self.assertTrue(any("must stay optional" in item for item in errors))
+
+    def test_bridge_rewrites_only_unsupported_initialize_version(self) -> None:
+        script = """
+const bridge = require("./scripts/cursor_mcp_stdio_bridge.js");
+const cursor331 = { method: "initialize", params: { protocolVersion: "2025-11-25" } };
+bridge.prepareMessage(cursor331);
+if (cursor331.params.protocolVersion !== "2025-06-18") process.exit(2);
+const echoed = { method: "initialize", params: { protocolVersion: "2025-06-18" } };
+bridge.prepareMessage(echoed);
+if (echoed.params.protocolVersion !== "2025-06-18") process.exit(3);
+const listing = { method: "tools/list", params: {} };
+bridge.prepareMessage(listing);
+if (listing.method !== "tools/list") process.exit(4);
+if (bridge.apiKeyFromEnv({ HK_COMPANY_API_KEY: "" }) !== "") process.exit(5);
+if (bridge.apiKeyFromEnv({ HK_COMPANY_API_KEY: "${HK_COMPANY_API_KEY}" }) !== "") process.exit(6);
+"""
+        completed = subprocess.run(["node", "-e", script], cwd=ROOT, check=False, capture_output=True, text=True)
+        self.assertEqual(completed.returncode, 0, completed.stderr)
 
     def test_logo_is_the_supplied_png(self) -> None:
         data = (ROOT / "assets" / "logo.png").read_bytes()

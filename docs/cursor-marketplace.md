@@ -39,9 +39,21 @@ docs/cursor-marketplace.md
 - 仓库根 `plugin.json`。它和 `.cursor-plugin/plugin.json` 是两套 manifest。Agent schema 不能表达这里需要的变量注入。
 - `.cursor-plugin/marketplace.json`。它的 schema 要求 `plugins[]` 和每个插件的 `source`，用于一个仓库收录多个插件。本仓库只有一个插件。官方单插件提交看的是 plugin manifest，不是这条多插件索引。
 
-`mcp.json` 只指向已经公开的端点：
+`mcp.json` 启动 `scripts/cursor_mcp_stdio_bridge.js`，再把 JSON-RPC 转到已经公开的端点：
 
 `https://www.86hc.com/wp-json/hkquery/v1/mcp/rpc`
+
+直接把这个 URL 写进插件时，Cursor 3.31.11 会用协议版本 `2025-11-25` 做 `initialize`。2026-11-20 实测该端点对这个版本回复 `2026-07-28`。Cursor 自带的 MCP SDK 只接受 `2025-11-25`、`2025-06-18`、`2025-03-26`、`2024-11-05` 和 `2024-10-07`，于是连接失败，工具列表出不来。同一端点会原样回显 `2025-06-18`。桥接只在握手请求里把 Cursor 不兼容的版本改成 `2025-06-18`，其余消息原样转发，不另写查册服务。空的 `HK_COMPANY_API_KEY`，以及未替换的 `${HK_COMPANY_API_KEY}` 字面量，都不会被放进请求头。
+
+## Cursor 3.31.11 图形界面验收
+
+2026-11-20 在这台带 XFCE 显示的 Linux 上，用官方 `.deb` 安装了 Cursor `3.31.11`（`52fdf018932f1335bc6dd36acc5e33d307591920`）。测试使用单独的 `HOME` 和 `--user-data-dir`，没有登录，没有使用个人账号。
+
+直接把远程 URL 写进插件时，Cursor 会加载 `86hc-hongkong-company`，但 stdio/HTTP 连接失败，日志是 `Server's protocol version is not supported: 2026-07-28`。改用上面的桥接后，同一未登录窗口里的日志变为 `Successfully connected to stdio server`，随后快照是 `status=connected`、`toolCount=9`。这是 Cursor 自己写出的工具描述文件，不是另一次手工握手。没有发送 `tools/call`。
+
+子进程环境里的 `HK_COMPANY_API_KEY` 不是 manifest 里的默认空字符串，而是 21 字节的未替换字面量 `${HK_COMPANY_API_KEY}`。桥接把这种字面量当成未配置。因此这次能挂载，不能解读成 Cursor 已经套用了 `default: ""`。
+
+命令面板可以执行 Open Plugins，窗口标题会变成 `Customize - workspace - Cursor`。未登录时画面仍停在 Log In / Sign Up，插件 logo 没有画出来。没有点击登录或注册。
 
 没有新的查册进程，没有改 `server.py`、`index.js`、`package.json`、`pyproject.toml`、`Dockerfile` 或 GitHub Actions。可选密钥使用插件变量 `HK_COMPANY_API_KEY`，配置里的值只有 `${HK_COMPANY_API_KEY}`。不使用用户级 `mcp.json` 的 `${env:NAME}`，那是另一套插值。变量不放进 `required`，默认是空字符串，以保留现有的客人额度路径。
 
@@ -117,7 +129,7 @@ Agent SDK 的扩展文档写明，未解析的插件占位符会使校验失败�
 | 关键词 | `86hc`、`hong-kong`、`company-registry`、`mcp` |
 | Logo | `assets/logo.png`，manifest 用相对路径引用。原图 94×84、不透明白底，图案未居中。官方文档没有规定像素尺寸，所以没有裁切、放大或改成透明背景。Marketplace 里的实际显示还没有图形界面可看 |
 | 最低客户端版本 | 未写。官方 Hunter 示例写了 Cursor `3.13.0`，本仓库没有验证这个下限 |
-| MCP 地址 | 上面的现有 RPC 地址，`type` 为 `http` |
+| MCP 地址 | 插件启动本地桥接，转发到上面的现有 RPC 地址。直接 HTTP 在 Cursor 3.31.11 上因协议版本 `2026-07-28` 被拒绝 |
 | 变量 | `HK_COMPANY_API_KEY`，可选，默认空 |
 | 服务条款 | `https://www.86hc.com/terms-of-service` |
 | 隐私政策 | `https://www.86hc.com/privacy-policy` |
