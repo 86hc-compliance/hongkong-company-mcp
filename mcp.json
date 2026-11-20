@@ -1,0 +1,11 @@
+{
+  "mcpServers": {
+    "hongkong-company": {
+      "type": "http",
+      "url": "https://www.86hc.com/wp-json/hkquery/v1/mcp/rpc",
+      "headers": {
+        "X-API-Key": "${HK_COMPANY_API_KEY}"
+      }
+    }
+  }
+}

@@ -1,0 +1,29 @@
+{
+  "name": "86hc-hongkong-company",
+  "displayName": "86HC Hong Kong Company",
+  "version": "1.3.2",
+  "description": "Connects to the existing 86hc.com Hong Kong company MCP. Guest quotas apply when no key is set. Filing orders and credit top-ups return payment links.",
+  "author": {
+    "name": "HC BUSINESS LIMITED",
+    "email": "support@86hc.com"
+  },
+  "publisher": "HC BUSINESS LIMITED",
+  "homepage": "https://www.86hc.com",
+  "repository": "https://github.com/86hc-compliance/hongkong-company-mcp",
+  "license": "MIT",
+  "keywords": ["86hc", "hong-kong", "company-registry", "mcp"],
+  "category": "integrations",
+  "tags": ["86hc", "hong-kong", "mcp"],
+  "variables": {
+    "type": "object",
+    "properties": {
+      "HK_COMPANY_API_KEY": {
+        "type": "string",
+        "title": "86HC API key",
+        "description": "Optional. Leave blank for the published guest quota. A key from https://www.86hc.com/user uses the registered quota. Cursor stores the value outside this repository.",
+        "default": ""
+      }
+    }
+  },
+  "mcpServers": "./mcp.json"
+}
