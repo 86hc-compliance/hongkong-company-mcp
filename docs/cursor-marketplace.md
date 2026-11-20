@@ -115,7 +115,7 @@ Agent SDK 的扩展文档写明，未解析的插件占位符会使校验失败�
 | 许可证 | `MIT` |
 | 分类 | `integrations`，只沿用官方插件仓库里见过的分类名 |
 | 关键词 | `86hc`、`hong-kong`、`company-registry`、`mcp` |
-| Logo | 仓库没有 logo 文件，manifest 不引用 |
+| Logo | `assets/logo.png`，manifest 用相对路径引用。原图 94×84、不透明白底，图案未居中。官方文档没有规定像素尺寸，所以没有裁切、放大或改成透明背景。Marketplace 里的实际显示还没有图形界面可看 |
 | 最低客户端版本 | 未写。官方 Hunter 示例写了 Cursor `3.13.0`，本仓库没有验证这个下限 |
 | MCP 地址 | 上面的现有 RPC 地址，`type` 为 `http` |
 | 变量 | `HK_COMPANY_API_KEY`，可选，默认空 |

@@ -6,6 +6,7 @@ run from this module.
 
 from __future__ import annotations
 
+import hashlib
 import json
 import shutil
 import sys
@@ -56,6 +57,21 @@ class CursorPluginManifestTest(unittest.TestCase):
         errors = validator.validate_tree(root)
         self.assertTrue(any("must stay optional" in item for item in errors))
 
+    def test_logo_is_the_supplied_png(self) -> None:
+        data = (ROOT / "assets" / "logo.png").read_bytes()
+        self.assertEqual(
+            hashlib.sha256(data).hexdigest(),
+            "577897b3e2e324e914d0d18933ff6a6d7094efc649408674a4ea98b6d1d2cf53",
+        )
+        manifest = json.loads((ROOT / ".cursor-plugin" / "plugin.json").read_text(encoding="utf-8"))
+        self.assertEqual(manifest["logo"], "assets/logo.png")
+
+    def test_missing_logo_is_rejected(self) -> None:
+        root = self._stage()
+        (root / "assets" / "logo.png").unlink()
+        errors = validator.validate_tree(root)
+        self.assertTrue(any("logo.png is missing" in item for item in errors))
+
     def test_handshake_refuses_tool_calls_before_the_network(self) -> None:
         with self.assertRaises(RuntimeError):
             handshake._post_checked(
@@ -73,6 +89,9 @@ class CursorPluginManifestTest(unittest.TestCase):
         docs = root / "docs"
         docs.mkdir()
         shutil.copyfile(ROOT / "docs" / "cursor-marketplace.md", docs / "cursor-marketplace.md")
+        assets = root / "assets"
+        assets.mkdir()
+        shutil.copyfile(ROOT / "assets" / "logo.png", assets / "logo.png")
         return root
 
 

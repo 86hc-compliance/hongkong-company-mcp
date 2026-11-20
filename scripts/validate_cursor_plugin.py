@@ -133,6 +133,7 @@ def validate_tree(root: Path) -> List[str]:
         errors.append(f"plugin.json {loc}: {err.message}")
 
     errors.extend(_check_manifest_policy(manifest))
+    errors.extend(_check_logo(root, manifest))
     errors.extend(_check_mcp(mcp, manifest))
     errors.extend(_check_secrets(manifest_path, mcp_path))
     errors.extend(_check_disclosure(doc_path.read_text(encoding="utf-8")))
@@ -194,6 +195,29 @@ def _check_manifest_policy(manifest: Any) -> List[str]:
             f"{API_KEY_VAR} must stay optional; a required key would drop the published guest quota path"
         )
     return errors
+
+
+def _check_logo(root: Path, manifest: Any) -> List[str]:
+    if not isinstance(manifest, dict):
+        return []
+    logo = manifest.get("logo")
+    if logo != "assets/logo.png":
+        return ['logo must be the relative path "assets/logo.png"']
+    path = root / "assets" / "logo.png"
+    if path.is_symlink():
+        return ["assets/logo.png must be a regular file"]
+    if not path.is_file():
+        return ["assets/logo.png is missing"]
+    try:
+        path.resolve().relative_to(root.resolve())
+    except ValueError:
+        return ["logo path escapes the plugin root"]
+    data = path.read_bytes()
+    if not data.startswith(b"\x89PNG\r\n\x1a\n"):
+        return ["assets/logo.png is not a PNG"]
+    if not 100 <= len(data) <= 1_000_000:
+        return ["assets/logo.png has an unexpected file size"]
+    return []
 
 
 def _check_mcp(mcp: Any, manifest: Any) -> List[str]:
